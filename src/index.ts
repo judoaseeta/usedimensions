@@ -130,6 +130,7 @@ const useDimensions = (initialDimensions: InitialDimensions): ReturnTypeUseDimen
 			);
 			// start to observer referenced element;
 			observer.observe(element);
+			return () => observer.unobserve(element);
 		}
 	});
 	/* return values
