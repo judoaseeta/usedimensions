@@ -88,7 +88,6 @@ interface ResizedDimensions {
 }
 ```
 > Note
-    margins of between 'InitialDimensions' and 'ResizedDimensions' will be different.
+    margins of between 'InitialDimensions' and 'ResizedDimensions' could be different.
     When you give fraction numbers to the margins on 'InitialDimensions', 
     returned margins of 'ResizedDimensions' will be numbers of fractional ratio of width and height.
-       
