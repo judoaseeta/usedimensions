@@ -9,7 +9,6 @@ import {
 	ResizeObserver
 } from '@juggle/resize-observer';
 
-
 /**
  * can provide initial width and height 
  * initial margins could be both fraction or number;

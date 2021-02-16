@@ -1,10 +1,12 @@
 {
-  "name": "usedimensions",
+  "name": "use-dimensions",
   "version": "1.0.0",
   "description": "React hooks for resizing svg's viewbox and calculating its size-relevant properties",
-  "main": "index.js",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build" : "tsc"
   },
   "repository": {
     "type": "git",
@@ -16,7 +18,7 @@
     "hook"
   ],
   "author": "Roy Choi <judoaseeta@gmail.com> (https://github.com/judoaseeta)",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/judoaseeta/usedimensions/issues"
   },
