@@ -1,6 +1,7 @@
 import {
 	useState,
 	useEffect,
+	useCallback,
 	useRef,
 	MutableRefObject
 } from 'react';
@@ -85,23 +86,31 @@ const calculateDimensions = ({
 
 
 export type ReturnTypeUseDimensions = {
-	ref: MutableRefObject<HTMLDivElement|null>,
-	dimensions: ResizedDimensions
+	ref: MutableRefObject<HTMLDivElement|null>/*(element: Element |null) => void*/,
+	dimensions: ResizedDimensions,
 };
 
-const useDimensions = (initialDimensions: InitialDimensions): ReturnTypeUseDimensions => {
+const useDimensions = <E>(
+	initialDimensions: InitialDimensions,
+	resizeObserver = ResizeObserver
+	): ReturnTypeUseDimensions => {
+		/*
+	const [element, setElement ] = useState<Element|null>(null);
+	const ref = useCallback((element: Element | null) => {
+		setElement(element);
+	},[]);
+	*/
 	const ref = useRef<HTMLDivElement>(null);
 	const [dimensions, setDimensions] = useState<ResizedDimensions>({
 		...calculateDimensions(initialDimensions),
 		isResized: false
 	});
 	useEffect(() => {
-		// ref of observed element
 		const element = ref.current;
 		// if DOM is rendered 
 		if (element) {
 			// resize observer
-			const observer = new ResizeObserver(
+			const observer = new resizeObserver(
 				entries => {
 					// if there is entries
 					if (entries.length > 0) {
@@ -131,9 +140,9 @@ const useDimensions = (initialDimensions: InitialDimensions): ReturnTypeUseDimen
 			observer.observe(element);
 			return () => observer.unobserve(element);
 		}
-	});
+	},[]);
 	/* return values
-	 * @ref: React.MutableRefObject 
+	 * @ref: Callback Ref  
 	 * @dimensions: ResizedDimensions
 	 * */
 	return {

@@ -1,17 +1,15 @@
-# usedimensions
+# use-react-dimensions
 React hook for resizing component(especially, svg view box or canvas ) and re-calculating its size-relevant properties.
 
 # Concept
 
-There is some time we need to calculate element's size and rerender it without CSS styling. 
-Most of it happens on SVG, Canvas and this hook will be useful to control them,
- but any HTML element could be.
+There is some time we need to calculate element's size and rerender it without CSS styling. Especially, the element's dimensions is fully depending on its parent's width and height. This is particularly useful on SVG, Canvas because they are not controlled by CSS styling per media queries. So, this hook will be useful to control them, but any HTML element without its own styles could be.
 
 You can set margins on four directions as you wish both fractional ratios on width and height and static values.Then, this hook calculates 'bounded' width and height which represents
-areas except margin areas and recalculates them whenever 'resize' is occured.
+areas except margin areas and recalculates them whenever 'resize' occurs.
 
 Here is a visual concept of these properties.
-
+```js
 --------------------------------------------------
 |           Margin-Top                            |
 |        __________________________________       |
@@ -26,17 +24,18 @@ Here is a visual concept of these properties.
 |       |__________________________________|      |
 |            Margin-Bottom                        |
 |_________________________________________________|
+```
 
 # Install
 
 ```sh
-npm install --save use-dimensions
-yarn add use-dimensions
+npm install --save use-react-dimensions
+yarn add use-react-dimensions
 ```
 # Usage
 ```jsx
 import React from 'react';
-import useDimensions from 'usedimensions';
+import useDimensions from 'use-react-dimensions';
 
 const SomeComponent:React.FC = () => {
     // ref: React.MutableRefObject<HTMLDivElement>;
@@ -87,7 +86,7 @@ interface ResizedDimensions {
     isResized: boolean;
 }
 ```
-> Note
+> ### Note
     margins of between 'InitialDimensions' and 'ResizedDimensions' could be different.
     When you give fraction numbers to the margins on 'InitialDimensions', 
-    returned margins of 'ResizedDimensions' will be numbers of fractional ratio of width and height.
+    returned margins of 'ResizedDimensions' will be numbers calculated by fractional ratios of width and height.
