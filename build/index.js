@@ -10,7 +10,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = require("react");
 var resize_observer_1 = require("@juggle/resize-observer");
 /* function calculateDimensions(initialDimensions: InitialDimensions): CalculatedDimensions
@@ -46,16 +46,22 @@ var calculateDimensions = function (_a) {
         boundedHeight: boundedHeight
     };
 };
-var useDimensions = function (initialDimensions) {
+var useDimensions = function (initialDimensions, resizeObserver) {
+    if (resizeObserver === void 0) { resizeObserver = resize_observer_1.ResizeObserver; }
+    /*
+const [element, setElement ] = useState<Element|null>(null);
+const ref = useCallback((element: Element | null) => {
+    setElement(element);
+},[]);
+*/
     var ref = react_1.useRef(null);
     var _a = react_1.useState(__assign(__assign({}, calculateDimensions(initialDimensions)), { isResized: false })), dimensions = _a[0], setDimensions = _a[1];
     react_1.useEffect(function () {
-        // ref of observed element
         var element = ref.current;
         // if DOM is rendered 
         if (element) {
             // resize observer
-            var observer_1 = new resize_observer_1.ResizeObserver(function (entries) {
+            var observer_1 = new resizeObserver(function (entries) {
                 // if there is entries
                 if (entries.length > 0) {
                     // first element of entries is only needed
@@ -75,9 +81,9 @@ var useDimensions = function (initialDimensions) {
             observer_1.observe(element);
             return function () { return observer_1.unobserve(element); };
         }
-    });
+    }, []);
     /* return values
-     * @ref: React.MutableRefObject
+     * @ref: Callback Ref
      * @dimensions: ResizedDimensions
      * */
     return {
@@ -85,4 +91,4 @@ var useDimensions = function (initialDimensions) {
         dimensions: dimensions
     };
 };
-exports["default"] = useDimensions;
+exports.default = useDimensions;

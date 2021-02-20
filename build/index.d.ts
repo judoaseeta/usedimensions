@@ -1,4 +1,5 @@
 import { MutableRefObject } from 'react';
+import { ResizeObserver } from '@juggle/resize-observer';
 /**
  * can provide initial width and height
  * initial margins could be both fraction or number;
@@ -23,5 +24,5 @@ export declare type ReturnTypeUseDimensions = {
     ref: MutableRefObject<HTMLDivElement | null>;
     dimensions: ResizedDimensions;
 };
-declare const useDimensions: (initialDimensions: InitialDimensions) => ReturnTypeUseDimensions;
+declare const useDimensions: <E>(initialDimensions: InitialDimensions, resizeObserver?: typeof ResizeObserver) => ReturnTypeUseDimensions;
 export default useDimensions;
