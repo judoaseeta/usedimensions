@@ -86,7 +86,7 @@ const calculateDimensions = ({
 
 
 export type ReturnTypeUseDimensions = {
-	ref: MutableRefObject<HTMLDivElement|null>/*(element: Element |null) => void*/,
+	ref: (element: Element |null) => void,
 	dimensions: ResizedDimensions,
 };
 
@@ -94,19 +94,16 @@ const useDimensions = <E>(
 	initialDimensions: InitialDimensions,
 	resizeObserver = ResizeObserver
 	): ReturnTypeUseDimensions => {
-		/*
+
 	const [element, setElement ] = useState<Element|null>(null);
 	const ref = useCallback((element: Element | null) => {
 		setElement(element);
 	},[]);
-	*/
-	const ref = useRef<HTMLDivElement>(null);
 	const [dimensions, setDimensions] = useState<ResizedDimensions>({
 		...calculateDimensions(initialDimensions),
 		isResized: false
 	});
 	useEffect(() => {
-		const element = ref.current;
 		// if DOM is rendered 
 		if (element) {
 			// resize observer
@@ -140,7 +137,7 @@ const useDimensions = <E>(
 			observer.observe(element);
 			return () => observer.unobserve(element);
 		}
-	},[]);
+	},[element]);
 	/* return values
 	 * @ref: Callback Ref  
 	 * @dimensions: ResizedDimensions
