@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.com/judoaseeta/usedimensions.svg?branch=main)](https://travis-ci.com/judoaseeta/usedimensions)
+[![Coverage Status](https://coveralls.io/repos/github/judoaseeta/usedimensions/badge.svg?branch=main)](https://coveralls.io/github/judoaseeta/usedimensions?branch=main)
+
 # use-react-dimensions
 React hook for resizing component(especially, svg view box or canvas ) and re-calculating its size-relevant properties.
 
