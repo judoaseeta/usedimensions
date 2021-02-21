@@ -1,4 +1,3 @@
-import { MutableRefObject } from 'react';
 import { ResizeObserver } from '@juggle/resize-observer';
 /**
  * can provide initial width and height
@@ -21,7 +20,7 @@ export interface ResizedDimensions extends CalculatedDimensions {
     isResized: boolean;
 }
 export declare type ReturnTypeUseDimensions = {
-    ref: MutableRefObject<HTMLDivElement | null>;
+    ref: (element: Element | null) => void;
     dimensions: ResizedDimensions;
 };
 declare const useDimensions: <E>(initialDimensions: InitialDimensions, resizeObserver?: typeof ResizeObserver) => ReturnTypeUseDimensions;

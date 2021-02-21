@@ -48,16 +48,12 @@ var calculateDimensions = function (_a) {
 };
 var useDimensions = function (initialDimensions, resizeObserver) {
     if (resizeObserver === void 0) { resizeObserver = resize_observer_1.ResizeObserver; }
-    /*
-const [element, setElement ] = useState<Element|null>(null);
-const ref = useCallback((element: Element | null) => {
-    setElement(element);
-},[]);
-*/
-    var ref = react_1.useRef(null);
-    var _a = react_1.useState(__assign(__assign({}, calculateDimensions(initialDimensions)), { isResized: false })), dimensions = _a[0], setDimensions = _a[1];
+    var _a = react_1.useState(null), element = _a[0], setElement = _a[1];
+    var ref = react_1.useCallback(function (element) {
+        setElement(element);
+    }, []);
+    var _b = react_1.useState(__assign(__assign({}, calculateDimensions(initialDimensions)), { isResized: false })), dimensions = _b[0], setDimensions = _b[1];
     react_1.useEffect(function () {
-        var element = ref.current;
         // if DOM is rendered 
         if (element) {
             // resize observer
@@ -81,7 +77,7 @@ const ref = useCallback((element: Element | null) => {
             observer_1.observe(element);
             return function () { return observer_1.unobserve(element); };
         }
-    }, []);
+    }, [element]);
     /* return values
      * @ref: Callback Ref
      * @dimensions: ResizedDimensions
