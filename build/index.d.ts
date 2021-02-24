@@ -19,9 +19,9 @@ interface CalculatedDimensions extends Required<InitialDimensions> {
 export interface ResizedDimensions extends CalculatedDimensions {
     isResized: boolean;
 }
-export declare type ReturnTypeUseDimensions = {
-    ref: (element: Element | null) => void;
+export declare type ReturnTypeUseDimensions<E extends HTMLElement> = {
+    ref: (element: E | null) => void;
     dimensions: ResizedDimensions;
 };
-declare const useDimensions: <E>(initialDimensions: InitialDimensions, resizeObserver?: typeof ResizeObserver) => ReturnTypeUseDimensions;
+declare const useDimensions: <E extends HTMLElement>(initialDimensions: InitialDimensions, resizeObserver?: typeof ResizeObserver) => any;
 export default useDimensions;

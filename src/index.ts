@@ -85,18 +85,18 @@ const calculateDimensions = ({
 }
 
 
-export type ReturnTypeUseDimensions = {
-	ref: (element: Element |null) => void,
+export type ReturnTypeUseDimensions<E extends HTMLElement> = {
+	ref: (element: E |null) => void,
 	dimensions: ResizedDimensions,
 };
 
-const useDimensions = <E>(
+const useDimensions = <E extends HTMLElement>(
 	initialDimensions: InitialDimensions,
 	resizeObserver = ResizeObserver
-	): ReturnTypeUseDimensions => {
+	): ReturnTypeUseDimensions<E> => {
 
-	const [element, setElement ] = useState<Element|null>(null);
-	const ref = useCallback((element: Element | null) => {
+	const [element, setElement ] = useState<E|null>(null);
+	const ref = useCallback((element: E | null) => {
 		setElement(element);
 	},[]);
 	const [dimensions, setDimensions] = useState<ResizedDimensions>({
