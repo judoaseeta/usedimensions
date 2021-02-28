@@ -65,8 +65,13 @@ describe('Testing useDimensions',() => {
         expect(result.current.dimensions).toMatchObject(expected);
     });
     it('should resize when listener is invoked', () => {
+        jest.spyOn(React,'useRef').mockReturnValue({
+            current: {
+                clientWidth: 500
+            }
+        })
         const { observer, listeners, mockObserve } = createMockObserver();
-        const { result } = renderHook(() => useDimensions({
+        const { result } = renderHook(() => useDimensions<HTMLDivElement>({
             width: 500,
             height: 400,
             marginTop: 0.2,
