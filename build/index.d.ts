@@ -23,5 +23,5 @@ export declare type ReturnTypeUseDimensions<E extends HTMLElement> = {
     ref: (element: E | null) => void;
     dimensions: ResizedDimensions;
 };
-declare const useDimensions: <E extends HTMLElement>(initialDimensions: InitialDimensions, resizeObserver?: typeof ResizeObserver) => any;
+declare const useDimensions: <E extends HTMLElement>(initialDimensions: InitialDimensions, resizeObserver?: typeof ResizeObserver) => ReturnTypeUseDimensions<E>;
 export default useDimensions;
