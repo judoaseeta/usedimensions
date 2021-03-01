@@ -1,6 +1,6 @@
 {
   "name": "use-react-dimensions",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "React hooks for resizing svg's viewbox and calculating its size-relevant properties",
   "main": "build/index.js",
   "types": "build/index.d.ts",
