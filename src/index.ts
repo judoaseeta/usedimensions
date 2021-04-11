@@ -37,7 +37,7 @@ interface CalculatedDimensions extends Required<InitialDimensions> {
  * */
 
 export interface ResizedDimensions extends CalculatedDimensions {
-	isResized: boolean;
+	isDomAttached: boolean;
 }
 
 /* function calculateDimensions(initialDimensions: InitialDimensions): CalculatedDimensions
@@ -91,47 +91,59 @@ export type ReturnTypeUseDimensions<E extends HTMLElement> = {
 const useDimensions = <E extends HTMLElement>(
 	initialDimensions: InitialDimensions,
 	resizeObserver = ResizeObserver
-	): ReturnTypeUseDimensions<E> => {
+): ReturnTypeUseDimensions<E> => {
 
 	const ref = useRef<E | null>(null);
 	const [dimensions, setDimensions] = useState<ResizedDimensions>({
 		...calculateDimensions(initialDimensions),
-		isResized: false
+		isDomAttached: false
 	});
 	useEffect(() => {
 		const element = ref.current;
 		// if DOM is rendered 
 		if (element) {
-			// resize observer
-			const observer = new resizeObserver(
-				entries => {
-					// if there is entries
-					if (entries.length > 0) {
-						// first element of entries is only needed
-						const entry = entries[0];
-						// check current width and height
-						const {width, height} = dimensions;
-						// check resized width and height
-						const {width: newWidth, height: newHeight} = entry.contentRect;
-						// if at least one of width and height is changed
-						if (width !== newWidth || height !== newHeight) {
-							// set newly calculatedDimension with new width or height.
-							setDimensions({
-								...calculateDimensions({
-									...initialDimensions,
-									width: newWidth,
-									height: newHeight,
-								}),
-								isResized: true
-							});
-
+			if(!dimensions.isDomAttached) {
+				const { width, height } = element.getBoundingClientRect();
+				setDimensions({
+					...calculateDimensions({
+						...initialDimensions,
+						width: Number(width.toFixed(3)),
+						height: Number(height.toFixed(3)),
+					}),
+					isDomAttached: true
+				});
+				// resize observer
+				const observer = new resizeObserver(
+					entries => {
+						// if there is entries
+						if (entries.length > 0) {
+							// first element of entries is only needed
+							const entry = entries[0];
+							// check current width and height
+							const {width, height} = dimensions;
+							// check resized width and height
+							
+							const newWidth = Number(entry.contentRect.width.toFixed(3));
+							const newHeight = Number(entry.contentRect.height.toFixed(3));
+							// if at least one of width and height is changed
+							if (width !== newWidth || height !== newHeight) {
+								// set newly calculatedDimension with new width or height.
+								setDimensions({
+									...calculateDimensions({
+										...initialDimensions,
+										width: newWidth,
+										height: newHeight,
+									}),
+									isDomAttached: true
+								});
+							}
 						}
 					}
-				}
-			);
-			// start to observer referenced element;
-			observer.observe(element);
-			return () => observer.unobserve(element);
+				);
+				// start to observer referenced element;
+				observer.observe(element);
+				return () => observer.unobserve(element);
+			}
 		}
 	},[ref]);
 	/* return values
@@ -140,7 +152,7 @@ const useDimensions = <E extends HTMLElement>(
 	 * */
 	return {
 		ref, 
-		dimensions
+		dimensions,
 	};
 }
 

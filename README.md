@@ -4,6 +4,8 @@
 # use-react-dimensions
 React hook for resizing component(especially, svg view box or canvas ) and re-calculating its size-relevant properties.
 
+Version 2.0.1 - There is a complete renewal of the library. A bug which makes a component re-render infinitely without CSS fixed width and height resolved.
+
 # Concept
 
 There is some time we need to calculate element's size and rerender it without CSS styling. Especially, the element's dimensions is fully depending on its parent's width and height. This is particularly useful on SVG, Canvas because they are not controlled by CSS styling per media queries. So, this hook will be useful to control them, but any HTML element without its own styles could be.
@@ -43,7 +45,7 @@ import useDimensions from 'use-react-dimensions';
 const SomeComponent:React.FC = () => {
     // ref: React.MutableRefObject<HTMLDivElement>;
     // dimensions : ResizedDimension; 
-    const { ref, dimensions } = useDimensions({
+    const { ref, dimensions } = useDimensions<HTMLDivElement>({
         marginLeft?: /* could be fraction number less than 1 or any real number */
         marginTop?: /* could be fraction number less than 1 or any real number */
         marginRight?: /* could be fraction number less than 1 or any real number */
@@ -53,13 +55,16 @@ const SomeComponent:React.FC = () => {
     } /* or just an empty object {} */);
     // attaching ref to the observed wrapper component
     return <div ref={ref}>
-        <svg
-            viewBox=`0 0 ${dimensions.width} ${dimensions.height}`
-            width={dimensions.width}
-            heihgt={dimensions.height}
-        >
-            ....render children
-        </svg>
+        {
+            // to prevent to render with initial dimensions
+            dimensions.isDomAttached &&
+            <svg
+                width={dimensions.width}
+                heihgt={dimensions.height}
+            >
+                ....render children
+            </svg>
+        }
     </div> 
 } 
 ```
@@ -86,7 +91,7 @@ interface ResizedDimensions {
     marginBottom: number;
     boundedHeight: number;
     boundedWidth: number;
-    isResized: boolean;
+    isDomAttached: boolean;
 }
 ```
 > ### Note

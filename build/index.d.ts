@@ -18,7 +18,7 @@ interface CalculatedDimensions extends Required<InitialDimensions> {
     boundedWidth: number;
 }
 export interface ResizedDimensions extends CalculatedDimensions {
-    isResized: boolean;
+    isDomAttached: boolean;
 }
 export declare type ReturnTypeUseDimensions<E extends HTMLElement> = {
     ref: MutableRefObject<E | null>;

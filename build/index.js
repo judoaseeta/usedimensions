@@ -49,31 +49,36 @@ var calculateDimensions = function (_a) {
 var useDimensions = function (initialDimensions, resizeObserver) {
     if (resizeObserver === void 0) { resizeObserver = resize_observer_1.ResizeObserver; }
     var ref = react_1.useRef(null);
-    var _a = react_1.useState(__assign(__assign({}, calculateDimensions(initialDimensions)), { isResized: false })), dimensions = _a[0], setDimensions = _a[1];
+    var _a = react_1.useState(__assign(__assign({}, calculateDimensions(initialDimensions)), { isDomAttached: false })), dimensions = _a[0], setDimensions = _a[1];
     react_1.useEffect(function () {
         var element = ref.current;
         // if DOM is rendered 
         if (element) {
-            // resize observer
-            var observer_1 = new resizeObserver(function (entries) {
-                // if there is entries
-                if (entries.length > 0) {
-                    // first element of entries is only needed
-                    var entry = entries[0];
-                    // check current width and height
-                    var width = dimensions.width, height = dimensions.height;
-                    // check resized width and height
-                    var _a = entry.contentRect, newWidth = _a.width, newHeight = _a.height;
-                    // if at least one of width and height is changed
-                    if (width !== newWidth || height !== newHeight) {
-                        // set newly calculatedDimension with new width or height.
-                        setDimensions(__assign(__assign({}, calculateDimensions(__assign(__assign({}, initialDimensions), { width: newWidth, height: newHeight }))), { isResized: true }));
+            if (!dimensions.isDomAttached) {
+                var _a = element.getBoundingClientRect(), width = _a.width, height = _a.height;
+                setDimensions(__assign(__assign({}, calculateDimensions(__assign(__assign({}, initialDimensions), { width: Number(width.toFixed(3)), height: Number(height.toFixed(3)) }))), { isDomAttached: true }));
+                // resize observer
+                var observer_1 = new resizeObserver(function (entries) {
+                    // if there is entries
+                    if (entries.length > 0) {
+                        // first element of entries is only needed
+                        var entry = entries[0];
+                        // check current width and height
+                        var width_1 = dimensions.width, height_1 = dimensions.height;
+                        // check resized width and height
+                        var newWidth = Number(entry.contentRect.width.toFixed(3));
+                        var newHeight = Number(entry.contentRect.height.toFixed(3));
+                        // if at least one of width and height is changed
+                        if (width_1 !== newWidth || height_1 !== newHeight) {
+                            // set newly calculatedDimension with new width or height.
+                            setDimensions(__assign(__assign({}, calculateDimensions(__assign(__assign({}, initialDimensions), { width: newWidth, height: newHeight }))), { isDomAttached: true }));
+                        }
                     }
-                }
-            });
-            // start to observer referenced element;
-            observer_1.observe(element);
-            return function () { return observer_1.unobserve(element); };
+                });
+                // start to observer referenced element;
+                observer_1.observe(element);
+                return function () { return observer_1.unobserve(element); };
+            }
         }
     }, [ref]);
     /* return values
@@ -82,7 +87,7 @@ var useDimensions = function (initialDimensions, resizeObserver) {
      * */
     return {
         ref: ref,
-        dimensions: dimensions
+        dimensions: dimensions,
     };
 };
 exports.default = useDimensions;

@@ -16,7 +16,7 @@ describe('Testing useDimensions',() => {
             marginTop: 30,
             boundedWidth: 240,
             boundedHeight: 240,
-            isResized: false
+            isDomAttached: false
         };
         expect(result.current.dimensions).toMatchObject(expected);
     });
@@ -36,7 +36,7 @@ describe('Testing useDimensions',() => {
             marginTop: 5,
             boundedWidth: 270,
             boundedHeight: 290,
-            isResized: false
+            isDomAttached: false
         };
         expect(result.current.dimensions).toMatchObject(expected);
     });
@@ -60,14 +60,18 @@ describe('Testing useDimensions',() => {
             marginTop: 80,
             boundedWidth: 350,
             boundedHeight: 300,
-            isResized: false
+            isDomAttached: false
         };
         expect(result.current.dimensions).toMatchObject(expected);
     });
     it('should resize when listener is invoked', () => {
         jest.spyOn(React,'useRef').mockReturnValue({
             current: {
-                clientWidth: 500
+                clientWidth: 500,
+                getBoundingClientRect: () => ({
+                    width: 600,
+                    height: 600
+                })
             }
         });
         const { observer, listeners, mockObserve } = createMockObserver();
@@ -86,20 +90,21 @@ describe('Testing useDimensions',() => {
         );
         // expected output with initialDimensions  
         const initialDimensionExpected = {
-            width: 500,
-            height: 400,
-            marginLeft: 50,
-            marginRight: 100,
-            marginBottom: 20,
-            marginTop: 80,
-            boundedWidth: 350,
-            boundedHeight: 300,
-            isResized: false
+            width: 600,
+            height: 600,
+            marginLeft: 60,
+            marginRight: 120,
+            marginBottom: 30,
+            marginTop: 120,
+            boundedWidth: 420,
+            boundedHeight: 450,
+            isDomAttached: true
         }
         // DOM is rendered.
+   
+        expect(result.current.dimensions).toEqual(initialDimensionExpected);
         // ResizeObserver.observe should be invoked.
         expect(mockObserve).toHaveBeenCalled();
-        expect(result.current.dimensions).toEqual(initialDimensionExpected);
         // assume resize happens
         // entries should be passed into listener
         act(() => {
@@ -119,10 +124,8 @@ describe('Testing useDimensions',() => {
             marginTop: 100,
             boundedWidth: 840,
             boundedHeight: 375,
-            isResized: true
+            isDomAttached: true
         }
-        expect(result.current.dimensions).toEqual(dimensionsExpected);
-
-        
+        expect(result.current.dimensions).toEqual(dimensionsExpected); 
     });
 });
